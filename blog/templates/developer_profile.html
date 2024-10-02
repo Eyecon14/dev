@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benneth Kyei Amponsah - EyeconTECH</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #35424a;
+        }
+
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header h1 {
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .profile-pic {
+            width: 150px;
+            border-radius: 75px;
+            margin-top: 15px;
+            transition: transform 0.3s;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.1);
+        }
+        
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s;
+        }
+
+        section:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            color: #35424a;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            margin-bottom: 5px;
+        }
+
+        .skills, ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 15px;
+        }
+
+        .project, .job, .education, .feedback {
+            margin-bottom: 15px;
+        }
+        
+        .feedback-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .like-btn, .edit-btn, .delete-btn {
+            background: none;
+            border: none;
+            color: #35424a;
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .like-btn:hover, .edit-btn:hover, .delete-btn:hover {
+            background-color: rgba(53, 66, 74, 0.1);
+        }
+        
+        textarea {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            transition: border 0.3s;
+        }
+        
+        textarea:focus {
+            border: 1px solid #35424a;
+            outline: none;
+        }
+        
+        button {
+            background: #35424a;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+        
+        button:hover {
+            background: #4a4a4a;
+            transform: scale(1.05);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background: #35424a;
+            color: #ffffff;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .profile-pic {
+                width: 120px;
+            }
+
+            section {
+                margin: 10px;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5em;
+            }
+
+            header h2 {
+                font-size: 1.2em;
+            }
+
+            .profile-pic {
+                width: 100px;
+            }
+
+            button {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Benneth Kyei Amponsah</h1>
+        <h2>Founder of EyeconTECH</h2>
+        <img src="profile.jpg" alt="Profile Picture" class="profile-pic">
+    </header>
+    
+    <section id="about">
+        <h2>About Me</h2>
+        <p>I'm Benneth Kyei Amponsah, known as Eyecon, a passionate developer and designer with expertise in creating dynamic and responsive web applications. I have a keen eye for detail and a deep understanding of various programming languages.</p>
+        
+        <h3>Skills</h3>
+        <ul class="skills">
+            <li>Python</li>
+            <li>JavaScript</li>
+            <li>PHP</li>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>VBA</li>
+            <li>Graphic Design</li>
+        </ul>
+        
+        <h3>Specializations</h3>
+        <p>I am skilled in:</p>
+        <ul>
+            <li>Frontend Development</li>
+            <li>Web Application Development</li>
+            <li>Database Software Development</li>
+            <li>Software Engineering</li>
+            <li>Full-Stack Development</li>
+        </ul>
+    </section>
+
+    <section id="projects">
+        <h2>Projects</h2>
+        <div class="project">
+            <h3>Project Title 1</h3>
+            <p>A brief description of what this project is about.</p>
+            <p><strong>Technologies Used:</strong> Python, Django, JavaScript</p>
+            <a href="https://github.com/yourusername/project1" target="_blank">View on GitHub</a>
+        </div>
+        <div class="project">
+            <h3>Project Title 2</h3>
+            <p>A brief description of what this project is about.</p>
+            <p><strong>Technologies Used:</strong> PHP, MySQL, HTML, CSS</p>
+            <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
+        </div>
+        <!-- Add more projects as needed -->
+    </section>
+
+    <section id="experience">
+        <h2>Experience</h2>
+        <div class="job">
+            <h3>Frontend Developer at Company XYZ</h3>
+            <p><strong>Duration:</strong> Jan 2020 - Present</p>
+            <p>Responsibilities include developing user-friendly interfaces and optimizing web applications for speed and efficiency.</p>
+        </div>
+        <div class="job">
+            <h3>Full-Stack Developer at Company ABC</h3>
+            <p><strong>Duration:</strong> Jan 2018 - Dec 2019</p>
+            <p>Worked on both client-side and server-side development, implementing new features and fixing bugs.</p>
+        </div>
+        <!-- Add more experiences as needed -->
+    </section>
+
+    <section id="education">
+        <h2>Education</h2>
+        <div class="education">
+            <h3>Bachelor of Science in Computer Science</h3>
+            <p>University of Technology</p>
+            <p>Graduated: 2017</p>
+        </div>
+        <!-- Add more education details as needed -->
+    </section>
+
+    <section id="contact">
+        <h2>Contact Me</h2>
+        <form id="feedback-form" method="POST">
+            {% csrf_token %}
+            <textarea name="feedback" rows="4" required placeholder="Leave your feedback here..."></textarea>
+            <button type="submit">Submit Feedback</button>
+        </form>
+        
+        <h3>Feedbacks</h3>
+        <div id="feedbacks-list">
+            {% for feedback in feedbacks %}
+            <div class="feedback">
+                <p>{{ feedback.content }}</p>
+                <div class="feedback-actions">
+                    <button class="like-btn" data-feedback-id="{{ feedback.id }}">
+                        ❤️ {{ feedback.total_likes }}
+                    </button>
+                    {% if request.user == feedback.user %}
+                    <button class="edit-btn" onclick="editFeedback({{ feedback.id }})">Edit</button>
+                    <button class="delete-btn" onclick="deleteFeedback({{ feedback.id }})">Delete</button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; {{ current_year }} Benneth Kyei Amponsah</p>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Handling the like button functionality
+            document.querySelectorAll('.like-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const feedbackId = this.dataset.feedbackId;
+                    fetch(`/feedback/like/${feedbackId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.innerText = `❤️ ${data.total_likes}`;
+                        } else {
+                            console.error('Error liking feedback:', data.error);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+        
+            // Function to edit feedback
+            window.editFeedback = function(feedbackId) {
+                // Code to handle editing feedback
+                const newContent = prompt("Edit your feedback:");
+                if (newContent) {
+                    fetch(`/feedback/edit/${feedbackId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ content: newContent })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload(); // Reload to see changes
+                        } else {
+                            console.error('Error editing feedback:', data.error);
+                        }
+                    });
+                }
+            }
+        
+            // Function to delete feedback
+            window.deleteFeedback = function(feedbackId) {
+                if (confirm("Are you sure you want to delete this feedback?")) {
+                    fetch(`/feedback/delete/${feedbackId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload(); // Reload to see changes
+                        } else {
+                            console.error('Error deleting feedback:', data.error);
+                        }
+                    });
+                }
+            }
+        
+            // Function to get CSRF token
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        // Check if this cookie string begins with the name we want
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+        
+    </script> <!-- Link to JavaScript -->
+</body>
+</html>

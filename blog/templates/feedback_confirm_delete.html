@@ -1,0 +1,21 @@
+<!-- feedback_confirm_delete.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Delete</title>
+</head>
+<body>
+<!-- feedback_confirm_delete.html -->
+<h1>Delete Feedback</h1>
+<p>Are you sure you want to delete this feedback?</p>
+<p>{{ feedback.content }}</p>
+<form action="{% url 'blog:feedback_delete' feedback.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Confirm Delete</button>
+</form>
+<a href="{% url 'blog:feedback_view' %}">Cancel</a>
+
+</body>
+</html>

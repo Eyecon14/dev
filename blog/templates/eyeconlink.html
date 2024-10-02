@@ -1,0 +1,312 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>User Management</h1>
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    </header>
+
+    <div class="nav-links">
+        <a href="{% url 'blog:home' %}">Home</a>
+        <a href="{% url 'blog:logout' %}">Logout</a>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="userSearch" placeholder="Search for users..." onkeyup="searchUsers()">
+    </div>
+
+    <div class="sort-container">
+        <label for="sortOptions">Sort by:</label>
+        <select id="sortOptions" onchange="sortUsers()">
+            <option value="likes">Total Likes</option>
+            <option value="followers">Total Followers</option>
+            <option value="following">Total Following</option>
+        </select>
+    </div>
+
+    <div class="bulk-action">
+        <button onclick="deleteSelectedUsers()">Delete Selected Users</button>
+    </div>
+
+    <div class="user-list" id="userList">
+        {% for user in users %}
+        <div class="user-item" data-username="{{ user.username }}" data-likes="{{ user.total_likes }}" data-followers="{{ user.total_followers }}" data-following="{{ user.total_following }}">
+            <input type="checkbox" class="user-checkbox" value="{{ user.id }}">
+            <img src="{{ user.profile.picture.url }}" alt="{{ user.username }}'s Profile Picture" class="profile-pic">
+            <span class="user-info">
+                <a href="{% url 'blog:user_profile' user.username %}" class="user-link">{{ user.username }}</a> (ID: {{ user.id }})
+                <div class="user-stats">
+                    <span>Total Likes: {{ user.total_likes }}</span>
+                    <span>Total Followers: {{ user.total_followers }}</span>
+                    <span>Total Following: {{ user.total_following }}</span>
+                    <span>Total Posts: {{ user.total_posts }}</span>
+                </div>
+            </span>
+            <button class="delete-btn" onclick="deleteUser({{ user.id }})">Delete</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="pagination" id="pagination">
+        <!-- Pagination buttons will be generated here -->
+    </div>
+
+    <div class="add-user-container">
+        <h2>Add New User</h2>
+        <form id="addUserForm" method="POST" action="{% url 'blog:add_user' %}">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Enter username" required>
+            <button type="submit">Add User</button>
+        </form>
+    </div>
+
+    <div class="user-activity-feed">
+        <h2>User Activity Feed</h2>
+        <div id="activityList">
+            <!-- Activity Feed will be dynamically generated -->
+        </div>
+    </div>
+
+    <script>
+        const usersPerPage = 10; // Change this value to adjust the number of users per page
+        let currentPage = 1;
+
+        function searchUsers() {
+            const input = document.getElementById('userSearch').value.toLowerCase();
+            const userItems = document.querySelectorAll('.user-item');
+
+            userItems.forEach(item => {
+                const username = item.getAttribute('data-username').toLowerCase();
+                if (username.includes(input)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            paginate();
+        }
+
+        function sortUsers() {
+            const sortOption = document.getElementById('sortOptions').value;
+            const userItems = Array.from(document.querySelectorAll('.user-item'));
+
+            userItems.sort((a, b) => {
+                const aValue = parseInt(a.getAttribute(`data-${sortOption}`));
+                const bValue = parseInt(b.getAttribute(`data-${sortOption}`));
+                return bValue - aValue; // Sort in descending order
+            });
+
+            const userList = document.getElementById('userList');
+            userList.innerHTML = ''; // Clear current user list
+            userItems.forEach(item => userList.appendChild(item));
+            paginate();
+        }
+
+        function paginate() {
+            const userItems = Array.from(document.querySelectorAll('.user-item'));
+            const totalPages = Math.ceil(userItems.length / usersPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = ''; // Clear current pagination
+
+            const start = (currentPage - 1) * usersPerPage;
+            const end = start + usersPerPage;
+            userItems.forEach((item, index) => {
+                if (index >= start && index < end) {
+                    item.style.display = ''; // Show the current page items
+                } else {
+                    item.style.display = 'none'; // Hide items not on the current page
+                }
+            });
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.innerText = i;
+                button.onclick = () => {
+                    currentPage = i;
+                    paginate();
+                };
+                pagination.appendChild(button);
+            }
+        }
+
+        function deleteUser(userId) {
+            if (confirm("Are you sure you want to delete this user?")) {
+                $.ajax({
+                    url: "{% url 'blog:delete_user' %}",
+                    type: 'POST',
+                    data: {
+                        'user_id': userId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        location.reload(); // Reload the page after successful deletion
+                    },
+                    error: function(error) {
+                        alert("Error deleting user");
+                    }
+                });
+            }
+        }
+
+        function deleteSelectedUsers() {
+            const selectedUsers = Array.from(document.querySelectorAll('.user-checkbox:checked'));
+            const userIds = selectedUsers.map(checkbox => checkbox.value);
+
+            if (userIds.length > 0 && confirm("Are you sure you want to delete the selected users?")) {
+                $.ajax({
+                    url: "{% url 'blog:delete_selected_users' %}",
+                    type: 'POST',
+                    data: {
+                        'user_ids': userIds,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        location.reload(); // Reload the page after successful deletion
+                    },
+                    error: function(error) {
+                        alert("Error deleting selected users");
+                    }
+                });
+            } else {
+                alert("No users selected for deletion.");
+            }
+        }
+
+        // Fetch user activity feed data (example)
+        function fetchActivityFeed() {
+            $.ajax({
+                url: "{% url 'blog:user_activity_feed' %}", // Endpoint for user activity feed
+                type: 'GET',
+                success: function(response) {
+                    const activityList = document.getElementById('activityList');
+                    activityList.innerHTML = ''; // Clear current activity feed
+                    response.forEach(activity => {
+                        const activityItem = document.createElement('div');
+                        activityItem.className = 'activity-item';
+                        activityItem.innerText = `${activity.username} - ${activity.action} on ${activity.date}`;
+                        activityList.appendChild(activityItem);
+                    });
+                },
+                error: function(error) {
+                    alert("Error fetching activity feed");
+                }
+            });
+        }
+
+        // Call fetchActivityFeed on page load
+        $(document).ready(function() {
+            fetchActivityFeed();
+            paginate();
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+        }
+        h1 {
+            margin: 0;
+        }
+        .nav-links {
+            margin-top: 10px;
+        }
+        .nav-links a {
+            margin-right: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .search-container, .sort-container, .bulk-action {
+            margin: 20px 0;
+        }
+        .search-container input, .sort-container select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .bulk-action button {
+            padding: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .user-list {
+            margin: 20px 0;
+        }
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .user-info {
+            flex-grow: 1;
+        }
+        .user-stats {
+            font-size: 14px;
+            color: #555;
+        }
+        .delete-btn {
+            padding: 5px 10px;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+        }
+        .user-activity-feed {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .activity-item {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+</body>
+</html>

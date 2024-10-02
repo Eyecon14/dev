@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Posts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Basic styling for layout */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .search-container {
+            margin: 20px 0;
+            text-align: center; /* Center the search bar */
+        }
+        
+        #search-input {
+            width: 300px; /* Width of the search input */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        #search-button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #007BFF; /* Change this to your desired button color */
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        #search-button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+        
+
+        .comment-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .comment-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .comment-profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid #ddd;
+            object-fit: cover;
+        }
+        
+        .comment-content {
+            flex: 1;
+        }
+        
+        .comment-username {
+            font-weight: bold;
+            color: #007BFF;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        
+        .comment-username:hover {
+            text-decoration: underline;
+            color: #0056b3;
+        }
+        
+        .comment-text {
+            margin-top: 5px;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .comment-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .like-button,
+        .tag-button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .like-button:hover,
+        .tag-button:hover {
+            background-color: #0056b3;
+        }
+        
+        .delete-comment {
+            color: #dc3545;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .comment-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .comment-profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid #ddd;
+            object-fit: cover;
+        }
+        
+        .comment-content {
+            flex: 1;
+        }
+        
+        .comment-username {
+            font-weight: bold;
+            color: #007BFF;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        
+        .comment-text {
+            margin-top: 5px;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        /* Container for all posts */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        /* Each post item */
+        li {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        /* Transition effect for hover */
+        li:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Styling for post title */
+        h2 {
+            border: 2px solid #4CAF50;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        /* Styling for post content */
+        p {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        /* Centered image styling */
+        .image-container {
+            text-align: center; /* Center the image container */
+        }
+        
+        img {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: inline-block; /* Allows centering with text-align */
+            max-width: 100%; /* Responsive */
+            height: auto;
+        }
+        
+        /* Button styling */
+        .button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .button:hover {
+            background-color: #45a049;
+        }
+        
+        /* Meta information styling */
+        .meta-info {
+            margin-top: 10px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Comments section */
+        .comments-section {
+            display: none; /* Hidden by default */
+            margin-top: 10px;
+        }
+        
+        /* Toggle comments link */
+        .toggle-comments {
+            cursor: pointer;
+            color: #007bff;
+        }
+        
+        /* Comment form styling */
+        textarea {
+            width: 100%;
+            height: 40px; /* Reduced height for professionalism */
+            margin-top: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            padding: 5px;
+        }
+        
+        /* Styling for comments by others */
+        .comments-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .comments-section li {
+            margin-bottom: 5px;
+        }
+        
+        /* Usernames and comments styling */
+        .comments-section strong {
+            color: #4CAF50; /* Username color */
+        }
+        
+        /* Overall container styling */
+        .container {
+            max-width: 800px; /* Centering the posts */
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling for post actions (Edit and Delete buttons) */
+        .post-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px; /* Space between buttons */
+        }
+
+        .post-actions .btn {
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Edit button styling */
+        .edit-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Delete button styling */
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Delete button inside form */
+        .delete-form {
+            display: inline-block;
+        }
+
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #007bff;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+            width: 100%;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .nav-links a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #0056b3;
+        }
+
+        /* Styles for mobile menu */
+        .menu-icon {
+            display: none; /* Hide menu icon by default */
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -300px; /* Initially hide the menu */
+            width: 250px;
+            height: 100%;
+            background: #007bff;
+            color: white;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+            transition: right 0.3s ease;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .mobile-menu.active {
+            right: 0; /* Show the menu */
+        }
+
+        .mobile-menu a {
+            display: block;
+            margin: 15px 0;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .close-menu {
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+        }
+
+
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* Hide the normal nav on small screens */
+            }
+
+            .menu-icon {
+                display: block; /* Show menu icon on small screens */
+            }
+
+            header {
+                justify-content: space-between;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+            
+            li {
+                padding: 15px;
+            }
+        
+            .button {
+                padding: 8px 10px;
+            }
+        }       
+         
+    </style>
+</head>
+<body>
+    <header>
+        <h1>All Blog Posts</h1>
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    </header>
+    
+    <div class="nav-links">
+        {% if user.is_authenticated %}
+            <a href="{% url 'blog:create_post' %}">Create Post</a>
+            <a href="{% url 'blog:change_settings' %}">Change Settings</a>
+            <a href="{% url 'blog:user_profile' user.username %}">{{ user.username }}</a>
+            <a href="{% url 'blog:logout' %}">Logout</a>
+            <a href="{% url 'blog:feedback_view' %}">Give Feedback</a>
+            <a href="{% url 'blog:developer_profile' %}">About Developer</a>
+
+        {% else %}
+            <a href="{% url 'blog:login' %}">Login</a>
+            <a href="{% url 'blog:signup' %}">Signup</a>
+            <a href="{% url 'blog:developer_profile' %}">About Developer</a>
+        {% endif %}
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="close-menu" onclick="toggleMenu()">✖</div>
+        {% if user.is_authenticated %}
+            <a href="{% url 'blog:create_post' %}">Create Post</a>
+            <a href="{% url 'blog:change_settings' %}">Change Settings</a>
+            <a href="{% url 'blog:user_profile' user.username %}">{{ user.username }}</a>
+            <a href="{% url 'blog:logout' %}">Logout</a>
+            <a href="{% url 'blog:feedback_view' %}">Give Feedback</a>
+            <a href="{% url 'blog:developer_profile' %}">About Developer</a>
+
+        {% else %}
+            <a href="{% url 'blog:login' %}">Login</a>
+            <a href="{% url 'blog:signup' %}">Signup</a>
+            <a href="{% url 'blog:developer_profile' %}">About Developer</a>
+        {% endif %}
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search by username or post title..." />
+        <button id="search-button">Search</button>
+    </div>
+    
+
+
+    {% load static %}
+
+    {% if posts %}
+        <ul>
+            {% for post in posts %}
+                <li>
+                    <h2>{{ post.title }}</h2>
+                    <p>{{ post.content }}</p>
+    
+                    <!-- Display post picture if available -->
+                    {% if post.picture %}
+                    <div class="image-container">
+                        <img src="{{ post.picture.url }}" alt="Post Picture">
+                    </div>
+                    {% endif %}
+    
+                    {% if post.link %}
+                    <p><a href="{{ post.link }}" target="_blank">Visit Link</a></p>
+                    {% endif %}
+    
+                    <!-- Meta information with icons -->
+                    <div class="meta-info">
+                        <button class="button" type="button" onclick="document.getElementById('like-{{ post.id }}').submit();">
+                            <i class="fa fa-thumbs-up"></i> {{ post.total_likes }}
+                        </button>
+                        <form id="like-{{ post.id }}" method="POST" action="{% url 'blog:like_post' post.id %}" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                        
+                        <span class="toggle-comments" onclick="toggleComments('{{ post.id }}')">
+                            <i class="fa fa-comments"></i> {{ post.comments.count }} Comments
+                        </span>
+                        <span>
+                            <form method="POST" action="{% url 'blog:share_post' post.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button class="button" type="submit">
+                                    <i class="fa fa-share"></i> {{ post.share_count }}
+                                </button>
+                            </form>
+                        </span>
+                    </div>
+
+                    
+    
+                    <!-- Comment Section -->
+                    <div id="comments-{{ post.id }}" class="comments-section" style="display: none;">
+                        {% if post.allow_comments %}
+                            {% if post.comments.count > 0 %}
+                                <p><strong>View Comments By Others:</strong></p>
+                                <ul class="comment-section">
+                                    {% for comment in post.comments.all %}
+                                        <li class="comment-item">
+                                            {% if comment.author.profile.picture %}
+                                                <img class="comment-profile-pic" src="{{ comment.author.profile.picture.url }}" alt="{{ comment.author }}">
+                                            {% else %}
+                                                <img class="comment-profile-pic" src="{% static 'profile_pictures/user.jpeg' %}" alt="Default Profile Picture">
+                                            {% endif %}
+
+                                            <div class="comment-content">
+                                                <a href="{% url 'blog:user_profile' comment.author %}" class="comment-username">{{ comment.author }}:</a>
+                                                <p class="comment-text">{{ comment.content }}</p>
+                                                <small class="comment-timestamp">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+                                                
+                                                <div class="comment-actions">
+                                                    <button class="like-btn" data-comment-id="{{ comment.id }}">
+                                                        ❤️ <span class="like-count">{{ comment.total_likes }}</span>
+                                                    </button>
+                                                    <button class="reply-btn" onclick="toggleReplyInput({{ comment.id }})">Reply</button>
+                                                    <input type="text" id="reply-input-{{ comment.id }}" style="display:none;" placeholder="Write a reply...">
+                                                
+                                                
+                                                    {% if comment.author == user %}
+                                                        <a href="{% url 'blog:edit_comment' comment.id %}">Edit</a>
+                                                        <a href="{% url 'blog:delete_comment' comment.id %}" class="delete-comment">Delete</a>
+                                                    {% endif %}
+                                                </div>
+
+                                                <div class="replies">
+                                                    {% for reply in comment.replies.all %}
+                                                        <div class="reply">
+                                                            <p>{{ reply.content }}</p>
+                                                            <small>{{ reply.created_at|date:"Y-m-d H:i" }}</small>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+
+                                                <div class="reply-input" id="reply-input-{{ comment.id }}" style="display:none;">
+                                                    <form method="POST" action="{% url 'blog:reply_comment' comment.id %}">
+                                                        {% csrf_token %}
+                                                        <input type="text" name="content" placeholder="Type your reply..." required>
+                                                        <button type="submit">Send</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>No comments yet.</p>
+                            {% endif %}
+                        {% else %}
+                            <p>Comments are turned off for this post.</p>
+                        {% endif %}
+                    </div>
+                        
+                        <!-- Comment Form (Initially hidden) -->
+                        {% if user.is_authenticated %}
+                            <div id="comment-form-{{ post.id }}" class="comment-form" style="display: none;">
+                                <form method="POST" action="{% url 'blog:add_comment' post.id %}">
+                                    {% csrf_token %}
+                                    <textarea name="content" placeholder="Add a comment..." required></textarea>
+                                    <button class="button" type="submit">Comment</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+    
+                    <!-- Toggle Comments for Post Creator -->
+                    {% if post.author == user %}
+                        <form method="POST" action="{% url 'blog:toggle_comments' post.id %}">
+                            {% csrf_token %}
+                            <button type="submit">
+                                {% if post.allow_comments %}
+                                    Disable Comments
+                                {% else %}
+                                    Enable Comments
+                                {% endif %}
+                            </button>
+                        </form>
+                    {% endif %}
+                    
+                    <!-- Display username, date, and time below the post -->
+                    <p>Posted by <strong>{{ post.author.username }}</strong></p>
+                    <p>Date: {{ post.created_at|date:"F j, Y" }} at {{ post.created_at|time:"H:i" }}</p>
+
+                                        <!-- Edit option visible only to the post author -->
+                                        {% if post.author == request.user %}
+                                        <div class="post-actions">
+                                            <a href="{% url 'blog:edit_post' post.id %}" class="btn edit-btn">Edit</a>
+                                            <form action="{% url 'blog:delete_post' post.id %}" method="POST" class="delete-form">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn delete-btn">Delete</button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No posts available.</p>
+    {% endif %}
+
+    <div id="loading" style="display: none;">Loading more posts...</div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        document.getElementById('search-button').addEventListener('click', function() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const posts = document.querySelectorAll('li'); // Select all post items
+            let noResults = true; // Flag to check if any results are found
+        
+            posts.forEach(post => {
+                const title = post.querySelector('h2').innerText.toLowerCase(); // Get post title
+                const author = post.querySelector('p').innerText.toLowerCase(); // Get post author info (you may need to adjust this selector based on your layout)
+        
+                // Check if the search term matches either the title or author
+                if (title.includes(searchTerm) || author.includes(searchTerm)) {
+                    post.style.display = 'list-item'; // Show post if it matches
+                    noResults = false; // A match was found
+                } else {
+                    post.style.display = 'none'; // Hide post if it doesn't match
+                }
+            });
+        
+            // Handle no results found case
+            const noPostsMessage = document.createElement('p');
+            noPostsMessage.id = 'no-results-message';
+            if (noResults) {
+                noPostsMessage.innerText = 'No posts found.';
+                document.querySelector('ul').appendChild(noPostsMessage);
+            } else {
+                const message = document.getElementById('no-results-message');
+                if (message) {
+                    message.remove(); // Remove no results message if matches are found
+                }
+            }
+        });
+        
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Handling the like button functionality
+            document.querySelectorAll('.like-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const commentId = this.dataset.commentId;
+                    console.log(`Attempting to like comment ID: ${commentId}`);
+                    
+                    fetch(`/like_comment/${commentId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            console.error('Network response was not ok:', response);
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Data received:', data); // Debugging output
+                        if (data.success) {
+                            const likeCountSpan = this.querySelector('.like-count');
+                            likeCountSpan.innerText = data.total_likes; // Update like count
+                        } else {
+                            console.error('Error liking comment:', data.error);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+        
+            // Handling the reply button functionality
+            document.querySelectorAll('.reply-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const commentId = this.dataset.commentId;
+                    const replyInput = document.getElementById(`reply-input-${commentId}`);
+                    replyInput.style.display = replyInput.style.display === 'none' ? 'block' : 'none';
+                });
+            });
+        
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+        
+    
+        // Function to like a post (unchanged)
+        function likePost(postId) {
+            fetch(`/like_post/${postId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                const likeButton = document.getElementById(`like-button-${postId}`);
+                if (data.success) {
+                    likeButton.textContent = data.liked ? `Liked (${data.total_likes})` : `Like (${data.total_likes})`;
+                } else {
+                    console.error('Error liking post:', data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    
+        // Function to toggle comments section visibility (unchanged)
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById('comments-' + postId);
+            const commentForm = document.getElementById('comment-form-' + postId);
+    
+            // Toggle the visibility of the comments section
+            const isVisible = commentsSection.style.display === 'block';
+            commentsSection.style.display = isVisible ? 'none' : 'block';
+            commentForm.style.display = isVisible ? 'none' : 'block'; // Show or hide the comment form
+        }
+
+        // Handling the reply form submission
+            document.querySelectorAll('.reply-form').forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    const commentId = this.dataset.commentId;
+                    const content = this.querySelector('textarea').value;
+
+                    fetch(`/reply_to_comment/${commentId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ content: content })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Append the new reply to the comments section
+                            const repliesContainer = document.getElementById(`replies-${commentId}`);
+                            const newReply = `<div class="reply"><p>${data.content}</p><small>${data.created_at}</small></div>`;
+                            repliesContainer.insertAdjacentHTML('beforeend', newReply); // Append new reply
+                            this.reset(); // Reset the reply form
+                            const replyInput = document.getElementById(`reply-input-${commentId}`);
+                            replyInput.style.display = 'none'; // Hide the reply input
+                        } else {
+                            console.error('Error replying to comment:', data.error);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+
+
+        let page = 2; // Start loading from the second page
+        let loading = false;
+
+        $(window).scroll(function() {
+            // Check if the user has scrolled to the bottom of the page
+            if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100 && !loading) {
+                loading = true; // Prevent multiple requests
+
+                $('#loading').show(); // Show loading indicator
+
+                // AJAX request to fetch more posts
+                $.ajax({
+                    url: "{% url 'blog:load_more_posts' %}?page=" + page,
+                    type: "GET",
+                    success: function(data) {
+                        if (data) {
+                            $('#posts-list').append(data); // Append new posts
+                            page++; // Increment the page number for the next request
+                        } else {
+                            $(window).off("scroll"); // Disable scroll event if no more posts
+                        }
+                        $('#loading').hide(); // Hide loading indicator
+                        loading = false; // Allow more requests
+                    },
+                    error: function() {
+                        $('#loading').hide(); // Hide loading indicator on error
+                        loading = false; // Allow more requests
+                    }
+                });
+            }
+        });
+        
+        
+
+        
+    </script>
+
+
+    
+    
+    
+</body>
+</html>

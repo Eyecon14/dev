@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .popup {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            padding: 20px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(-50px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .popup.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        p {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .content {
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .image-container {
+            width: 100%;
+            max-height: 200px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.05);
+        }
+
+        .message {
+            background-color: #e0ffe0;
+            color: #4caf50;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .back-link {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .back-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="popup show">
+        <h1>{{ post.title }}</h1>
+ 
+        <p>By {{ post.author }} on {{ post.published_date }}</p>
+        <div class="content">
+            {{ post.content }}
+        </div>
+        <div class="message">Changes made successfully!</div>
+        <a href="{% url 'blog:view_posts' %}" class="back-link">Back to Posts</a>
+    </div>
+
+    <script>
+        // Optionally, you can close the popup when clicking outside of it
+        window.onclick = function(event) {
+            const popup = document.querySelector('.popup');
+            if (event.target === popup) {
+                popup.classList.remove('show');
+            }
+        };
+    </script>
+</body>
+</html>

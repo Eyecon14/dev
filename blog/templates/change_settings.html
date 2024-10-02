@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Settings</title>
+    {% load static %}
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            padding: 20px;
+        }
+        
+        /* Settings container */
+        .settings-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .settings-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Title styling */
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        /* Profile picture */
+        .profile-pic {
+            margin-bottom: 20px;
+        }
+        
+        .profile-pic img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #ddd;
+            box-shadow: 0 4px 20px rgba(0, 123, 255, 0.1);
+        }
+        
+        .file-input {
+            display: block;
+            margin-top: 10px;
+            padding: 8px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        /* Form styling */
+        form {
+            text-align: left;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        
+        input[type="text"], input[type="email"], input[type="password"], textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        
+        textarea {
+            resize: none;
+        }
+        
+        /* Button styling */
+        .btn {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Cancel link */
+        .cancel-link {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+        
+        .cancel-link:hover {
+            color: #007BFF;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .settings-container {
+                padding: 20px;
+                width: 100%;
+            }
+        
+            h1 {
+                font-size: 24px;
+            }
+        
+            input[type="text"], input[type="email"], input[type="password"], textarea {
+                padding: 10px;
+                font-size: 14px;
+            }
+        
+            .btn {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="settings-container">
+        <h1>Update Your Settings</h1>
+    
+        <!-- Profile Picture Section -->
+        <div class="profile-pic">
+            {% if profile.picture %}
+                <img src="{{ profile.picture.url }}" alt="Profile Picture">
+            {% else %}
+                <img src="{% static 'default-profile.png' %}" alt="Default Profile Picture">
+            {% endif %}
+           
+        </div>
+    
+        <!-- Form to Update Profile Information -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+    
+            <!-- Username Section -->
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" value="{{ user.username }}" required>
+            </div>
+    
+            <!-- Bio Section -->
+            <div class="form-group">
+                <label for="bio">Bio:</label>
+                <textarea name="bio" rows="3">{{ profile.bio }}</textarea>
+            </div>
+    
+            <!-- Email Section -->
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" name="email" value="{{ user.email }}" required>
+            </div>
+    
+            <!-- Contact Section -->
+            <div class="form-group">
+                <label for="contact">Contact:</label>
+                <input type="text" name="contact" value="{{ profile.contact }}" required>
+            </div>
+    
+            <!-- Full Name Section -->
+            <div class="form-group">
+                <label for="full_name">Full Name:</label>
+                <input type="text" name="full_name" value="{{ profile.first_name }} {{ profile.other_name }} {{ profile.surname }}" required>
+            </div>
+    
+            <!-- Password Section -->
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password" placeholder="Enter new password (optional)">
+            </div>
+    
+            <!-- Save Changes Button -->
+            <button type="submit" class="btn">Save Changes</button>
+        </form>
+    
+        <!-- Cancel Link -->
+        <a href="{% url 'blog:view_posts' %}" class="cancel-link">Cancel</a>
+    </div>
+    
+    </body>
+    </html>
